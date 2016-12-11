@@ -99,7 +99,6 @@ public class KeyLockScript : ToggleableScript {
 			}
 
 			//Check tension is correct
-			int oldTumbler = currentTumblerToPick;
 			currentTumblerOrderToPick = (int)(leftTrigger / tensionStep) - 1;
 			if(currentTumblerOrderToPick > keylockdata.tumblerOrder.Length - 1)
 				currentTumblerOrderToPick = keylockdata.tumblerOrder.Length - 1;
@@ -107,15 +106,14 @@ public class KeyLockScript : ToggleableScript {
 				currentTumblerToPick = -1;
 			else
 				currentTumblerToPick = keylockdata.tumblerOrder[currentTumblerOrderToPick];
-//			if(oldTumbler != currentTumblerToPick)
-//				audioSource.PlayOneShot (hitTumblerClip, 1f);
+
 
 			//Set all tumblers above currentTumblerToPick to 0 height
 			for (int i=currentTumblerOrderToPick+1; i<keylockdata.tumblerOrder.Length; i++)
 				currentHeights [keylockdata.tumblerOrder[i]] = 0;
 
 			//Set current tumbler
-			oldTumbler = (int)((-0.5f - lockpickX) / tumblerSize);
+			int oldTumbler = (int)((-0.5f - lockpickX) / tumblerSize);
 			if (oldTumbler >= currentHeights.Length)
 				oldTumbler = currentHeights.Length - 1;
 
@@ -136,9 +134,11 @@ public class KeyLockScript : ToggleableScript {
 
 			if (currentTumblerBeingPicked >= currentHeights.Length)
 				currentTumblerBeingPicked = currentHeights.Length - 1;
+
 			// Play tumbler click if on a new tumbler
-			if (oldTumbler != currentTumblerBeingPicked)
+			if (oldTumbler != currentTumblerBeingPicked) {
 				audioSource.PlayOneShot (hitTumblerClip, 1f);
+			}
 
 			//if currentTumblerBeingPicked is after currentTumblerToPick
 			int pickingOrder = System.Array.IndexOf(keylockdata.tumblerOrder, currentTumblerBeingPicked);
@@ -161,13 +161,13 @@ public class KeyLockScript : ToggleableScript {
 					pickingAudioSource.Stop ();
 			//if currentTumblerBeingPicked is currentTumblerToPick
 			} else {
-//				if (rightTrigger > currentHeights[currentTumblerBeingPicked]){
-//					if(!pickingAudioSource.isPlaying)
-//						pickingAudioSource.Play ();
-//				} else {
-//					if(pickingAudioSource.isPlaying)
-//						pickingAudioSource.Stop ();
-//				}
+				if (rightTrigger > currentHeights[currentTumblerBeingPicked]){
+					if(!pickingAudioSource.isPlaying)
+						pickingAudioSource.Play ();
+				} else {
+					if(pickingAudioSource.isPlaying)
+						pickingAudioSource.Stop ();
+				}
 
 				bool wasCorrect = CorrectHeight(currentTumblerBeingPicked);
 				if (rightTrigger > currentHeights[currentTumblerBeingPicked]){
@@ -196,6 +196,9 @@ public class KeyLockScript : ToggleableScript {
 				rotatable.Rotate (new Vector3(0,unlockSpeed*Time.deltaTime,0));
 				audioSource.Stop ();
 				audioSource.PlayOneShot (unlockedClip, 1f);
+
+				if(pickingAudioSource.isPlaying)
+					pickingAudioSource.Stop ();
 			}
 		} else {
 			rotatable.Rotate (new Vector3(0,unlockSpeed*Time.deltaTime,0));

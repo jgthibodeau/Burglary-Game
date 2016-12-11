@@ -20,6 +20,7 @@ public class DialLockScript : ToggleableScript {
 	public int currentTumbler;
 	public float currentAngle;
 	private float prevAngle;
+	public float minAngleChange;
 	public float tumblerAngleTolerance;
 	public Vector2 listenPoint;
 	private int resetAngle;
@@ -112,10 +113,10 @@ public class DialLockScript : ToggleableScript {
 			prevDirection = currentDirection;
 			Vector3 prevInputVector = new Vector3(prevInputLeft.x, 0, prevInputLeft.y);
 			Vector3 inputVector = new Vector3(inputLeft.x, 0, inputLeft.y);
-			if(prevInputVector.magnitude > .9f && inputVector.magnitude > .9f && !prevInputVector.Equals (inputVector)){
-				float angle = Vector3.Angle (prevInputVector, inputVector);
+			float angle = Vector3.Angle (prevInputVector, inputVector);
+			if(prevInputVector.magnitude > .9f && inputVector.magnitude > .9f && angle > minAngleChange){
 				float sign = Mathf.Sign(Vector3.Cross(prevInputVector, inputVector).y);
-				currentAngle += angle*sign*rotateSpeed;
+				currentAngle -= angle*sign*rotateSpeed;
 
 				if(sign > 0)
 					currentDirection = DIRECTION.CLOCKWISE;
