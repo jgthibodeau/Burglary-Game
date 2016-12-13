@@ -119,7 +119,7 @@
      <Compile Include="Assets\AstarPathfindingProject\changelog.cs" />
      <Compile Include="Assets\Scripts\AnimationScript.cs" />
      <Compile Include="Assets\Scripts\Camera2DScript.cs" />
-     <Compile Include="Assets\Scripts\Camera3dScript.cs" />
+     <Compile Include="Assets\Scripts\Camera3DScript.cs" />
      <Compile Include="Assets\Scripts\ConfirmationDialogScript.cs" />
      <Compile Include="Assets\Scripts\CopScript.cs" />
      <Compile Include="Assets\Scripts\CopSpawnerScript.cs" />
